@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<!-- Mobile font size fix -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Tic-Tac-Toe</title>
+		<link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+		<link rel="icon" href="img/favicon.ico" type="image/x-icon">
+		<link href="css/main.css" rel="stylesheet">
+		<!-- Google Fonts -->
+		<link href="https://fonts.googleapis.com/css?family=Roboto:100|Righteous" rel="stylesheet">
+	</head>
+	<body>
+		<h1 id="app-title" class="app-title">Tic-Tac-Toe</h1>
+
+		<div id="status" class="status"></div>
+
+		<table class="grid">
+			<tr>
+				<td id="cell-0"></td>
+				<td id="cell-1"></td>
+				<td id="cell-2"></td>
+			</tr>
+			<tr>
+				<td id="cell-3"></td>
+				<td id="cell-4"></td>
+				<td id="cell-5"></td>
+			</tr>
+			<tr>
+				<td id="cell-6"></td>
+				<td id="cell-7"></td>
+				<td id="cell-8"></td>
+			</tr>
+		</table>
+
+		<table class="scores">
+			<tr>
+				<td id="scores-x">X - <span id="x-score">0</span></td>
+				<td></td>
+				<td id="scores-o">O - <span id="o-score">0</span></td>
+			</tr>
+		</table>
+
+		<div class="restart-controls">
+			<span id="restart">Next round</span>
+		</div>
+
+		<div class="credits">
+			<a class="credits-link" href="https://d2718nis.github.io" target="_blank">April 2017 by Denis Z.</a>
+		</div>
+
+		<script src="js/main.js"></script>
+	</body>
+</html>
