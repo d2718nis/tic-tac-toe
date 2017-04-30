@@ -262,7 +262,7 @@ var controller = {
 	calculateScore: function() {
 		switch(model.checkSomebodyWin()) {
 			case 0:
-				view.showStatus('It\'s a draft!');
+				view.showStatus('It\'s a tie!');
 				break;
 			case 1:
 				view.showStatus('You win this round!');
