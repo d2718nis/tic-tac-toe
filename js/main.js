@@ -130,7 +130,6 @@ var model = {
 			if (this.movesHistory.length === 0) {
 				return 0;
 			} else {
-				console.log(JSON.stringify(this.currentStrategy));
 				for (var id in this.currentStrategy) {
 					if (Math.floor(id/10) === this.movesHistory[this.movesHistory.length-1]) {
 						this.currentStrategy = this.currentStrategy[id];
