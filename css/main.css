@@ -74,7 +74,7 @@ body {
 	cursor: pointer;
 	border: 1px solid #c59b96;
 	/*border-radius: 2px;*/
-	padding: 5px;
+	padding: 7px;
 	transition: color 0.2s, border 0.2s, background 0.2s;
 }
 #restart:hover {
