@@ -2,7 +2,7 @@ var model = {
 	grid: [0, 0, 0, 0, 0, 0, 0, 0, 0],
 	winCombinations: [[0,1],[0,3],[0,4],[1,3],[2,2],[2,3],[3,1],[6,1]],
 	xStrategy: {13:{26:null,46:null,56:null,64:{25:null,58:null,75:null,85:null},76:null,86:null},
-		23:{26:null,46:null,56:null,64:{15:null,58:null,75:null,85:null},76:null,86:null},
+		23:{16:null,46:null,56:null,64:{15:null,58:null,75:null,85:null},76:null,86:null},
 		31:{24:{57:null,67:null,78:null,87:null},42:null,52:null,62:null,72:null,82:null},
 		41:{26:{35:{78:null,87:null},53:null,73:null,83:null},32:null,52:null,62:null,72:null,82:null},
 		54:{18:null,28:null,38:null,68:null,78:null,82:{16:null,31:null,61:null,71:null}},
