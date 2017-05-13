@@ -2,7 +2,7 @@ Tic-Tac-Toe
 ==========
 Tic-tac-toe game app for the [freecodecamp](https://www.freecodecamp.com) challenge.
 * Github pages: https://d2718nis.github.io/tic-tac-toe
-* Codepen.io: http://codepen.io/d2718nis/full/vmmLyx
+* Codepen.io: https://codepen.io/d2718nis/full/vmmLyx
 
 ![Tic-Tac-Toe](https://d2718nis.github.io/img/portfolio8.png "Tic-Tac-Toe")
 
