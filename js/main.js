@@ -1,6 +1,9 @@
 var model = {
 	grid: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+	// Math representation of win combinations as [cell, factor]
 	winCombinations: [[0,1],[0,3],[0,4],[1,3],[2,2],[2,3],[3,1],[6,1]],
+	// This is an optimal strategy for the X player, visual representation can be found here:
+	// https://en.wikipedia.org/wiki/Tic-tac-toe#/media/File:Tictactoe-X.svg
 	xStrategy: {13:{26:null,46:null,56:null,64:{25:null,58:null,75:null,85:null},76:null,86:null},
 		23:{16:null,46:null,56:null,64:{15:null,58:null,75:null,85:null},76:null,86:null},
 		31:{24:{57:null,67:null,78:null,87:null},42:null,52:null,62:null,72:null,82:null},
@@ -9,6 +12,8 @@ var model = {
 		61:{24:{37:null,57:null,78:null,87:null},32:null,42:null,52:null,72:null,82:null},
 		72:{14:{36:null,56:null,68:null,86:null},31:null,41:null,51:null,61:null,81:null},
 		82:{16:{34:null,43:null,53:null,73:null},31:null,41:null,51:null,61:null,71:null}},
+	// This is an optimal strategy for the O player, visual representation can be found here:
+	// https://en.wikipedia.org/wiki/Tic-tac-toe#/media/File:Tictactoe-O.svg
 	oStrategy: {04:{12:{36:null,56:null,63:{57:null,75:null,85:null},76:null,86:null},
 			21:{37:null,57:null,67:null,73:{58:null,65:null,85:null},87:null},
 			36:{12:null,21:{57:null,75:null,87:null},52:null,72:null,82:null},
@@ -90,12 +95,15 @@ var model = {
 	getWinnedCombination: function() {
 		return this.winnedCombimation;
 	},
+	// Reset the game: new round
 	resetGameState: function(userPlaysX) {
 		this.grid = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 		this.winnedCombimation = [];
 		this.movesHistory = [];
 		this.currentStrategy = userPlaysX ? this.oStrategy : this.xStrategy;
 	},
+	// Make player move, return false if the cell is already busy or the game is
+	// over, otherwise return true
 	makeYourMove: function(id) {
 		if (this.grid[id] === 0 && !this.checkGameIsOver()) {
 			this.grid[id] = 1;
@@ -104,6 +112,7 @@ var model = {
 		}
 		return false;
 	},
+	// Make AI move
 	makeAiMove: function(userPlaysX) {
 		while (!this.checkGameIsOver()) {
 			var id;
@@ -117,9 +126,10 @@ var model = {
 		}
 		return false;
 	},
+	// Calculate the move based on predefined strategy
 	calculateMove: function(userPlaysX) {
 		if (userPlaysX) {
-			// calculate Os move
+			// Calculate move for the O (as long as user plays X)
 			for (var id in this.currentStrategy) {
 				if (Math.floor(id/10) === this.movesHistory[this.movesHistory.length-1]) {
 					this.currentStrategy = this.currentStrategy[id];
@@ -127,7 +137,9 @@ var model = {
 				}
 			}
 		} else {
+			// Calculate move for the X
 			if (this.movesHistory.length === 0) {
+				// If this is a first move, always start with top left corner
 				return 0;
 			} else {
 				for (var id in this.currentStrategy) {
@@ -139,12 +151,15 @@ var model = {
 			}
 		}
 	},
+	// Check for the end of the game (no moves or somebody wins)
 	checkGameIsOver: function() {
 		if (this.checkMoveAvailable()) {
 			return this.checkSomebodyWin() !== 0;
 		}
 		return true;
 	},
+	// Check if there is at least one cell with 0 value (not populated yet),
+	// then return true, otherwise return false
 	checkMoveAvailable: function() {
 		for (var i = 0; i < this.grid.length; i++) {
 			if (this.grid[i] === 0) {
@@ -153,11 +168,14 @@ var model = {
 		}
 		return false;
 	},
+	// Check if somebody wins, there is some math included
 	checkSomebodyWin: function() {
 		for (var j = 0; j < this.winCombinations.length; j++) {
 			var i = this.winCombinations[j][0];
 			var factor = this.winCombinations[j][1];
-			if (this.grid[i] !== 0 && this.grid[i+factor] * this.grid[i+2*factor] === Math.pow(this.grid[i], 2)) {
+			if (this.grid[i] !== 0 && this.grid[i+factor] * this.grid[i+2*factor]
+				=== Math.pow(this.grid[i], 2)) {
+				// Math representation of the win formula
 				this.winnedCombimation = [i, i+factor, i+2*factor];
 				return this.grid[i];
 			}
