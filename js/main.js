@@ -89,9 +89,11 @@ var model = {
 	winnedCombimation: [],
 	movesHistory: [],
 
+	// Return current grid state
 	getGrid: function() {
 		return this.grid;
 	},
+	// Return
 	getWinnedCombination: function() {
 		return this.winnedCombimation;
 	},
@@ -104,7 +106,7 @@ var model = {
 	},
 	// Make player move, return false if the cell is already busy or the game is
 	// over, otherwise return true
-	makeYourMove: function(id) {
+	makePlayerMove: function(id) {
 		if (this.grid[id] === 0 && !this.checkGameIsOver()) {
 			this.grid[id] = 1;
 			this.movesHistory.push(parseInt(id));
@@ -115,9 +117,7 @@ var model = {
 	// Make AI move
 	makeAiMove: function(userPlaysX) {
 		while (!this.checkGameIsOver()) {
-			var id;
-			// tmp
-			id = this.calculateMove(userPlaysX);
+			var id = this.calculateMove(userPlaysX);
 			if (this.grid[id] === 0) {
 				this.grid[id] = 2;
 				this.movesHistory.push(id);
@@ -187,6 +187,7 @@ var model = {
 
 
 var view = {
+	// Change title, just for fun
 	toggleEasterEgg: function(element) {
 		if (element.innerHTML === 'Tic-Tac-Toe') {
 			element.innerHTML = 'A Code is Forever';
@@ -194,17 +195,22 @@ var view = {
 			element.innerHTML = 'Tic-Tac-Toe';
 		}
 	},
+	// Draw grid filled with X and Os
 	drawGrid: function(grid, userPlaysX) {
+		// Hide the restart button
 		document.getElementById('restart').style.display = 'none';
 		for (var i = 0; i < grid.length; i++) {
 			switch(grid[i]) {
 				case 0:
+					// No one here (empty cell)
 					document.getElementById('cell-'+i).innerHTML = '';
 					break;
 				case 1:
+					// Player moves
 					document.getElementById('cell-'+i).innerHTML = userPlaysX ? 'X' : 'O';
 					break;
 				case 2:
+					// AI moves
 					document.getElementById('cell-'+i).innerHTML = userPlaysX ? 'O' : 'X';
 					break;
 			}
@@ -212,22 +218,27 @@ var view = {
 			document.getElementById('cell-'+i).style.color = '';
 		}
 	},
+	// Display hint (status) text
 	showStatus: function(status) {
 		document.getElementById('status').innerHTML = status;
 	},
+	// Display current game score
 	showScore: function(xScore, oScore) {
 		document.getElementById('x-score').innerHTML = xScore;
 		document.getElementById('o-score').innerHTML = oScore;
 	},
+	// Display button to restart the game
 	showNextRoundButton: function() {
 		document.getElementById('restart').style.display = 'inline';
 	},
+	// Highlight combination that wins the game
 	highlightWinnedCombination: function(combination) {
 		for (var i = 0; i < combination.length; i++) {
 			document.getElementById('cell-'+combination[i]).style.background = '#F67E7D';
 			document.getElementById('cell-'+combination[i]).style.color = '#0B032D';
 		}
 	},
+	// Highlight the letter that user plays (X or O)
 	highlightUserLetter: function(userPlaysX) {
 		if (userPlaysX) {
 			document.getElementById('scores-x').style.fontWeight = 'bold';
@@ -242,24 +253,30 @@ var view = {
 
 
 var controller = {
+	// User plays X if this is true
 	userPlaysX: true,
-	userWins: 0,
-	aiWins: 0,
+	// X player score
+	xWins: 0,
+	// O player score
+	oWins: 0,
 
+	// Start a new game
 	restartGame: function() {
 		model.resetGameState(this.userPlaysX);
 		view.highlightUserLetter(this.userPlaysX);
-		view.showScore(this.userWins, this.aiWins);
+		view.showScore(this.xWins, this.oWins);
 		view.showStatus('');
 		view.drawGrid(model.getGrid(), this.userPlaysX);
 		if (!this.userPlaysX) {
+			// Make first move if AI plays X
 			model.makeAiMove(this.userPlaysX);
 			view.drawGrid(model.getGrid(), this.userPlaysX);
 		}
 	},
 	makeOneTurn: function(id) {
-		if (model.makeYourMove(id.match(/\d+/)[0])) {
+		if (model.makePlayerMove(id)) {
 			view.drawGrid(model.getGrid(), this.userPlaysX);
+			// Pass userPlaysX to select the right strategy
 			model.makeAiMove(this.userPlaysX);
 			view.drawGrid(model.getGrid(), this.userPlaysX);
 			if (model.checkGameIsOver()) {
@@ -269,37 +286,43 @@ var controller = {
 			}
 		}
 	},
+	// Change the letter from X to O and vice versa
 	changeXO: function(playX) {
 		if (this.userPlaysX !== playX) {
 			this.userPlaysX = playX;
-			this.userWins = 0;
-			this.aiWins = 0;
+			// If user changes the letter, reset the score
+			this.xWins = 0;
+			this.oWins = 0;
 			this.restartGame();
 		}
 	},
+	// Calculate and update the score
 	calculateScore: function() {
 		switch(model.checkSomebodyWin()) {
 			case 0:
+				// Nobody wins
 				view.showStatus('It\'s a tie!');
 				break;
 			case 1:
+				// User wins
 				view.showStatus('You win this round!');
 				if (this.userPlaysX) {
-					this.userWins++;
+					this.xWins++;
 				} else {
-					this.aiWins++;
+					this.oWins++;
 				}
 				break;
 			case 2:
+				// AI wins
 				view.showStatus('AI wins this round!');
 				if (this.userPlaysX) {
-					this.aiWins++;
+					this.oWins++;
 				} else {
-					this.userWins++;
+					this.xWins++;
 				}
 				break;
 		}
-		view.showScore(this.userWins, this.aiWins);
+		view.showScore(this.xWins, this.oWins);
 	},
 	// ========== Onload handler ==========
 	handlerOnload: function() {
@@ -320,7 +343,8 @@ var controller = {
 			case 'cell-6':
 			case 'cell-7':
 			case 'cell-8':
-				this.makeOneTurn(target.id);
+				// Distinct with regex number from 'cell-0' etc.
+				this.makeOneTurn(target.id.match(/\d+/)[0]);
 				break;
 			case 'scores-x':
 			case 'x-score':
@@ -360,6 +384,7 @@ var controller = {
 				controller.handleClick(e.target);
 			});
 			for (var i = 0; i < 9; i++) {
+				// Add click event handlers for each cell
 				document.getElementById('cell-' + i).addEventListener('click', function(e) {
 					controller.handleClick(e.target);
 				});
